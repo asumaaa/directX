@@ -519,7 +519,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		barrierDesc.Transition.StateBefore = D3D12_RESOURCE_STATE_PRESENT;//•\¦ó‘Ô‚©‚ç
 		barrierDesc.Transition.StateAfter = D3D12_RESOURCE_STATE_RENDER_TARGET;//•`‰æó‘Ô‚Ö
 		commandList->ResourceBarrier(1, &barrierDesc);
-	#pragma endregion
+	#pragma endregion 
 
 	// 2. •`‰ææ‚Ì•ÏX
 	#pragma region •`‰ææ‚Ì•ÏX
