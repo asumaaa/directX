@@ -272,16 +272,33 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 #pragma region 描画処理初期化
 
 	#pragma region 頂点データ
-	//頂点データ
-	XMFLOAT3 vertices[] =
+
+	//頂点データ構造体
+	struct Vertex
 	{
-		{-0.5f,-0.5f,0.0f},//左下
-		{-0.5f,+0.5f,0.0f},//左上
-		{+0.5f,-0.5f,0.0f},//右下
-		{+0.5f,+0.5f,0.0f},//右上
+		XMFLOAT3 pos;	//xyz座標
+		XMFLOAT2 uv;	//uv座標
 	};
+
+	//頂点データ
+	Vertex vertices[] =
+	{
+		{{-0.4f,-0.7f,0.0f},{0.0f,1.0f}},
+		{{-0.4f,+0.7f,0.0f},{0.0f,0.0f}},
+		{{+0.4f,-0.7f,0.0f},{1.0f,1.0f}},
+		{{+0.4f,+0.7f,0.0f},{1.0f,0.0f}},
+	};
+
+	////頂点データ
+	//XMFLOAT3 vertices[] =
+	//{
+	//	{-0.5f,-0.5f,0.0f},//左下
+	//	{-0.5f,+0.5f,0.0f},//左上
+	//	{+0.5f,-0.5f,0.0f},//右下
+	//	{+0.5f,+0.5f,0.0f},//右上
+	//};
 	//頂点データの全体のサイズ = 頂点データ一つ分のサイズ * 頂点データの要素数
-	UINT sizeVB = static_cast<UINT>(sizeof(XMFLOAT3) * _countof(vertices));
+	UINT sizeVB = static_cast<UINT>(sizeof(vertices[0]) * _countof(vertices));
 
 	//インデックスデータ
 	uint16_t indices[] =
@@ -325,7 +342,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	#pragma region 頂点バッファへのデータ転送
 
 	//GPU上のバッファに対応した仮想メモリ（メインメモリ上）を取得
-	XMFLOAT3* vertMap = nullptr;
+	Vertex* vertMap = nullptr;
 	result = vertBuff->Map(0, nullptr, (void**)&vertMap);
 	assert(SUCCEEDED(result));
 	//全頂点に対して
@@ -347,7 +364,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	//頂点バッファのサイズ
 	vbView.SizeInBytes = sizeVB;
 	//頂点一つ分のデータサイズ
-	vbView.StrideInBytes = sizeof(XMFLOAT3);
+	vbView.StrideInBytes = sizeof(vertices[0]);
 
 	#pragma endregion
 
@@ -432,6 +449,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	{
 		{
 			"POSITION",0,DXGI_FORMAT_R32G32B32_FLOAT,0,
+			D3D12_APPEND_ALIGNED_ELEMENT,
+			D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA,0
+		},
+		{
+			"TEXCOORD",0,DXGI_FORMAT_R32G32_FLOAT,0,
 			D3D12_APPEND_ALIGNED_ELEMENT,
 			D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA,0
 		},
@@ -682,8 +704,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	// 4. 描画コマンド
 	#pragma region 描画コマンド
 
-	#pragma region グラフィックスコマンド
-
 	#pragma region ビューポート設定
 
 	//ビューポート設定コマンド
@@ -748,7 +768,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	
 	#pragma endregion
 	
-	#pragma endregion
 	#pragma endregion
 
 	// 5 . リソースバリアを戻す
