@@ -680,7 +680,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		commandList->SetGraphicsRootConstantBufferView(0, constBuffMaterial->GetGPUVirtualAddress());
 
 		//描画コマンド
-		commandList->DrawInstanced(_countof(vertices), 1, 0, 0);//全ての頂点を使って描画
+		commandList->DrawInstanced(/*_countof(vertices)*/6, 1, 0, 0);//全ての頂点を使って描画
 	
 	#pragma endregion
 	
